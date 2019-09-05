@@ -1,29 +1,42 @@
 from flask import Flask, jsonify, request
 from .entities.entity import Session, engine, Base
-from .entities.playbook import Playbook
+from .entities.playbook import Playbook, PlaybookSchema
 
 app = Flask(__name__)
 
 # generate database schema
 Base.metadata.create_all(engine)
 
-# start session
-session = Session()
 
-# check for existing data
-playbooks = session.query(Playbook).all()
+@app.route('/playbooks')
+def get_playbooks():
+  # fetching from the database
+  session = Session()
+  playbook_objects = session.query(Playbook).all()
 
-if len(playbooks) == 1:
-  # create and persist dummy exam
-  python_playbook = Playbook("NForce-IT", "Runbook Output", "script")
-  session.add(python_playbook)
-  session.commit()
+  # transforming into JSON-serializable objects
+  schema = PlaybookSchema(many=True)
+  playbooks = schema.dump(playbook_objects)
+
+  # serializing as JSON
   session.close()
+  return jsonify(playbooks)
 
-  # reload exams
-  playbook = session.query(Playbook).all()
 
-# show existing exams
-print('### Playbooks:')
-for playbook in playbooks:
-  print(f'({playbook.id}) {playbook.title} - {playbook.description}')
+@app.route('/playbooks', methods=['POST'])
+def add_playbook():
+  # mount exam object
+  posted_playbook = PlaybookSchema(only=('title', 'description')) \
+    .load(request.get_json())
+
+  playbook = Playbook(**posted_playbook, created_by="HTTP post request")
+
+  # persist exam
+  session = Session()
+  session.add(playbook)
+  session.commit()
+
+  # return created exam
+  new_playbook = PlaybookSchema().dump(playbook)
+  session.close()
+  return jsonify(new_playbook), 201

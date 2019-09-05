@@ -25,6 +25,7 @@ touch src/entities/__init__.py
 touch src/entities/entity.py
 touch src/entities/playbook.py
 touch src/main.py
+touch bootstrap.sh
 ```
 
 ## Activate Python venv
@@ -43,3 +44,19 @@ python -m src.main
 pipenv install flask marshmallow
 ```
 
+```bash
+# make script executable
+chmod u+x bootstrap.sh
+
+# execute script in the background
+./bootstrap.sh &
+
+# create a new exam
+curl -X POST -H 'Content-Type: application/json' -d '{
+  "title": "Awesome Playbook",
+  "description": "Just say hello with Ansible"
+}' http://0.0.0.0:5000/playbooks
+
+# retrieve exams
+curl http://0.0.0.0:5000/playbooks
+```
