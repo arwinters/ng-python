@@ -51,12 +51,20 @@ chmod u+x bootstrap.sh
 # execute script in the background
 ./bootstrap.sh &
 
-# create a new exam
+# retrieve playbooks
+curl http://0.0.0.0:5000/playbooks
+
+# create a new playbook
 curl -X POST -H 'Content-Type: application/json' -d '{
   "title": "Awesome Playbook",
   "description": "Just say hello with Ansible"
 }' http://0.0.0.0:5000/playbooks
 
-# retrieve exams
-curl http://0.0.0.0:5000/playbooks
+```
+
+## Angular
+```bash
+cd ..
+ng new frontend
+cd frontend
 ```
