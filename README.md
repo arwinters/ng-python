@@ -67,4 +67,6 @@ curl -X POST -H 'Content-Type: application/json' -d '{
 cd ..
 ng new frontend
 cd frontend
+touch src/app/env.ts
+mkdir src/app/playbooks
 ```
