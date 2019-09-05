@@ -1,6 +1,5 @@
 # ng-python
-Angular and Python Happy Together
-
+Angular and Python Happy Together. Flask is used as Web API and saves all data into postgres.
 
 ## SQL
 
@@ -48,7 +47,7 @@ pipenv install flask marshmallow
 # make script executable
 chmod u+x bootstrap.sh
 
-# execute script in the background
+# start development server for running Flask
 ./bootstrap.sh &
 
 # retrieve playbooks
@@ -59,10 +58,11 @@ curl -X POST -H 'Content-Type: application/json' -d '{
   "title": "Awesome Playbook",
   "description": "Just say hello with Ansible"
 }' http://0.0.0.0:5000/playbooks
-
 ```
 
 ## Angular
+
+##### Bootstrap
 ```bash
 cd ..
 ng new frontend
@@ -70,3 +70,9 @@ cd frontend
 touch src/app/env.ts
 mkdir src/app/playbooks
 ```
+
+##### Start NG App
+
+```bash
+ng serve
+``` 
